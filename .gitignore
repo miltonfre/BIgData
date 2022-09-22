@@ -1,0 +1,11 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/KafkaStreaming/bin/Debug/netcoreapp3.1
+/KafkaStreaming/obj
+/mySparkStreamingApp/obj
+/mySparkStreamingApp/.vs
+/mySparkStreamingApp2/bin/Debug
+/mySparkStreamingApp2/.vs/mySparkStreamingApp2
+/mySparkStreamingApp2/obj

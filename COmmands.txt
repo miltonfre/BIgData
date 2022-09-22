@@ -1,0 +1,35 @@
+https://dotnet.microsoft.com/en-us/learn/data/spark-tutorial/install-dotnet
+
+
+
+spark-submit --class org.apache.spark.deploy.dotnet.DotnetRunner --master local bin\Debug\netcoreapp3.1\microsoft-spark-3-0_2.12-2.1.1.jar dotnet bin\Debug\netcoreapp3.1\mySparkStreamingApp2.dll localhost 9999
+
+d:
+cd D:\Personal\Master Maharishi\Classes\BigData\FInalProject\mySparkStreamingApp2
+spark-submit --class org.apache.spark.deploy.dotnet.DotnetRunner --master local bin\Debug\netcoreapp3.1\microsoft-spark-3-0_2.12-2.1.1.jar dotnet bin\Debug\netcoreapp3.1\mySparkStreamingApp2.dll C:\bin\Input.txt
+
+
+cd D:\Personal\Master Maharishi\Classes\BigData\FInalProject\mySparkStreamingApp2
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1 --class org.apache.spark.deploy.dotnet.DotnetRunner --master local bin\Debug\netcoreapp3.1\microsoft-spark-3-0_2.12-2.1.1.jar dotnet bin\Debug\netcoreapp3.1\mySparkStreamingApp2.dll
+
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1 --class org.apache.spark.deploy.dotnet.DotnetRunner --master local bin\Debug\netcoreapp3.1\microsoft-spark-3-0_2.12-2.1.1.jar dotnet bin\Debug\netcoreapp3.1\mySparkStreamingApp2.dll
+
+--Download kafka
+
+--run zookeeper
+cd C:\bin\kafka_2.12-3.2.1
+C:\bin\kafka_2.12-3.2.1\bin\windows\zookeeper-server-start.bat config/zookeeper.properties
+
+--run kafka
+cd C:\bin\kafka_2.12-3.2.1
+C:\bin\kafka_2.12-3.2.1\bin\windows\kafka-server-start.bat config/server.properties
+
+--Check topics on kafka
+C:\bin\kafka_2.12-3.2.1\bin\windows\kafka-topics.bat --describe --topic twits --bootstrap-server localhost:9092
+
+--read the evenst
+C:\bin\kafka_2.12-3.2.1\bin\windows\kafka-console-consumer.bat --topic twits --from-beginning --bootstrap-server localhost:9092
+
+-- kafka create topic
+bin/kafka-topics.sh --create --topic topictest --bootstrap-server localhost:9092
+
