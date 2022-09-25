@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.32428.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mySparkStreamingApp2", "mySparkStreamingApp2.csproj", "{3619123E-86A5-4FF3-9ABA-77E74FC77139}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaStreaming", "..\KafkaStreaming\KafkaStreaming.csproj", "{2DA43210-1C65-410B-B6F6-F174A53F28FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaStreaming", "..\KafkaStreaming\KafkaStreaming.csproj", "{2DA43210-1C65-410B-B6F6-F174A53F28FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentimentRazor", "..\SentimentRazor\SentimentRazor.csproj", "{42AFE47F-DCF8-4BB4-863F-516D5980F8F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mySparkStreamingApp2ML.Model", "..\mySparkStreamingApp2ML.Model\mySparkStreamingApp2ML.Model.csproj", "{5BA14E24-5E33-4BBB-8B5F-01A1E4DB296A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mySparkStreamingApp2ML.ConsoleApp", "..\mySparkStreamingApp2ML.ConsoleApp\mySparkStreamingApp2ML.ConsoleApp.csproj", "{CECA7585-3E4C-4927-A9E4-86E0D80756BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{2DA43210-1C65-410B-B6F6-F174A53F28FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DA43210-1C65-410B-B6F6-F174A53F28FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DA43210-1C65-410B-B6F6-F174A53F28FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42AFE47F-DCF8-4BB4-863F-516D5980F8F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42AFE47F-DCF8-4BB4-863F-516D5980F8F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42AFE47F-DCF8-4BB4-863F-516D5980F8F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42AFE47F-DCF8-4BB4-863F-516D5980F8F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BA14E24-5E33-4BBB-8B5F-01A1E4DB296A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BA14E24-5E33-4BBB-8B5F-01A1E4DB296A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BA14E24-5E33-4BBB-8B5F-01A1E4DB296A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BA14E24-5E33-4BBB-8B5F-01A1E4DB296A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CECA7585-3E4C-4927-A9E4-86E0D80756BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CECA7585-3E4C-4927-A9E4-86E0D80756BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CECA7585-3E4C-4927-A9E4-86E0D80756BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CECA7585-3E4C-4927-A9E4-86E0D80756BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

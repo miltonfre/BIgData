@@ -1,6 +1,10 @@
 https://dotnet.microsoft.com/en-us/learn/data/spark-tutorial/install-dotnet
 
+configure  HBase cluster in HDInsight
+https://github.com/uglide/azure-content/blob/master/articles/hdinsight/hdinsight-hbase-tutorial-get-started-linux.md
 
+install ML.net
+https://learn.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/install-ml-net-cli?tabs=windows
 
 spark-submit --class org.apache.spark.deploy.dotnet.DotnetRunner --master local bin\Debug\netcoreapp3.1\microsoft-spark-3-0_2.12-2.1.1.jar dotnet bin\Debug\netcoreapp3.1\mySparkStreamingApp2.dll localhost 9999
 

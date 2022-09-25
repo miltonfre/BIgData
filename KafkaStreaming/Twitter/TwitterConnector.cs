@@ -40,7 +40,7 @@ namespace KafkaStreaming.Twitter
                     System.Console.WriteLine(args.Tweet.Text);
                     _kafkaProducer.ProduceMessage(args.Tweet.Text);
                     i++;
-                    if (i>=5)
+                    if (i>=300)
                     {
                         _stream2.StopStream();
                         _kafkaProducer.DisposeProducer();

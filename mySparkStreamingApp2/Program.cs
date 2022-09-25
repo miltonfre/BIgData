@@ -3,7 +3,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Spark.Sql;
 using Microsoft.Spark.Sql.Streaming;
 
+using System.Collections.Generic;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using MySparkStreamingApp2ML.Model;
+
 using static Microsoft.Spark.Sql.Functions;
+using Tweetinvi.Core.Extensions;
 
 namespace mySparkStreamingApp2
 {
@@ -11,18 +17,93 @@ namespace mySparkStreamingApp2
     {
         static void Main(string[] args)
         {
-            runSparkKafka(args);
+             // runSparkKafka(args);
+           runSparkKafkaStreamML(args);
+            //runSparkKafkaStream(args);
             //wordCount(args);
         }
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, collection) =>
+
+
+        private static void runSparkKafkaStreamML(string[] args)
         {
-            //collection.AddHostedService<KafkaConsumerHostService>();
-            // collection.AddHostedService<KafkaProducerHostService>();
-        });
+            SparkSession spark = SparkSession
+                                .Builder()
+                                .AppName(".NET for Apache Spark Sentiment Analysis")
+                                .GetOrCreate();
+
+            DataFrame df = spark
+                .ReadStream()
+                .Format("kafka")
+                .Option("kafka.bootstrap.servers", "localhost:9092")
+                .Option("subscribe", "twits")
+                .Option("startingOffsets", "earliest")
+                .Option("failOnDataLoss", "false")
+                .Load().SelectExpr("CAST(value AS STRING)");
+
+            System.Console.WriteLine("PrintSchema-----------------------------------------");
+            df.CreateOrReplaceTempView("twits");
+            df.PrintSchema();
+            var TwitOnString = df.SelectExpr("CAST(value AS STRING)");
+            
+
+            TwitOnString.CreateOrReplaceTempView("twits");
+            System.Console.WriteLine("PrintSchema-----------------------------------------");
+            TwitOnString.PrintSchema();
+
+
+           // TwitOnString.Show();
+            spark.Udf()
+                        .Register<string, bool>("MLudf", Predict);
+
+            // Use Spark SQL to call ML.NET UDF
+            // Display results of sentiment analysis on reviews
+            df.CreateOrReplaceTempView("twits");
+            DataFrame sqlDf = spark.Sql("SELECT value, MLudf(value) FROM twits");
+            // sqlDf.Show();
+
+            // Print out first 20 rows of data
+            // Prevent data getting cut off by setting truncate = 0
+            var query = sqlDf
+                .WriteStream()
+                .OutputMode("Append")
+                .Format("console")
+               .Start();
+            query.AwaitTermination();
+
+            spark.Stop();
+        }
 
         private static void runSparkKafka(string[] args)
+        {
+            SparkSession spark = SparkSession
+            .Builder()
+            .AppName("Kafka_Dataset")
+            .GetOrCreate();
+            System.Console.WriteLine("SparkSession CREATED");
+
+            DataFrame df = spark
+                .Read()
+                .Format("kafka")
+                .Option("kafka.bootstrap.servers", "localhost:9092")
+                .Option("subscribe", "twits")
+                .Option("startingOffsets", "earliest")
+                .Option("failOnDataLoss", "false")
+                .Load();
+
+            var TwitOnString = df.SelectExpr("CAST(value AS STRING)");
+            var twits_tab = TwitOnString
+                               .WithColumn("word", Explode(Split(Col("value"), " ")))
+                               .GroupBy("word")
+                               .Count()
+                               .Sort()
+                               .Filter(Col("word").Contains("#"));
+
+            twits_tab.Show();
+            System.Console.WriteLine("COMPLETED");
+            spark.Stop();
+
+        }
+        private static void runSparkKafkaStream(string[] args)
         {
             //The Spark Session is the entry point to programming Spark with the Dataset and DataFrame API.
             //allows you to access Spark and DataFrame functionality throughout your program.
@@ -42,48 +123,28 @@ namespace mySparkStreamingApp2
                 .Option("failOnDataLoss", "false")
                 .Load();
             System.Console.WriteLine("df LOADED");
-            //   var query = df.WriteStream()
-            //.Format("console")
-            //.Start();
 
-            df.SelectExpr("CAST(value AS STRING)");
-            System.Console.WriteLine("CASTING VALUE");
+            var TwitOnString = df.SelectExpr("CAST(value AS STRING)");
 
-            DataFrame words = df
-                .Select(Explode(Split(df["value"], " "))
-                    .Alias("word"));
-            DataFrame wordCounts = words.GroupBy("word").Count();
-            System.Console.WriteLine("WORDS COUNTED");
-
-            //wordCounts.Show();
-            StreamingQuery query = wordCounts
+            var twits_tab = TwitOnString
+                               .WithColumn("word", Explode(Split(Col("value"), " ")))
+                               .GroupBy("word");
+            
+            var query = TwitOnString
                 .WriteStream()
-                .OutputMode("complete")
+                .OutputMode("Append")
                 .Format("console")
-                .Start();
-            System.Console.WriteLine("COMPLETED");
+               .Start();
+            query.AwaitTermination();
 
-            query.AwaitTermination(3000); 
-            //df.SelectExpr("CAST(key AS STRING)", "CAST(value AS STRING)");
-            // df.Show();
-
-            // Stop Spark session
             spark.Stop();
-            //.As(String, String);
-
-            //This UDF processes each string it receives from the netcat terminal to produce an array that includes the original string (contained in str), followed by the original string concatenated with the length of the original string.
-            //Func<Column, Column> udfArray =
-            //                        Udf<string, string[]>((str) => new string[] { str, $"{str} {str.Length}" });
-
-            //DataFrame arrayDF = lines.Select(Explode(udfArray(lines["value"])));
-
-            //StreamingQuery query = arrayDF
-            //                        .WriteStream()
-            //                        .Format("console")
-            //                        .Start();
-            //query.AwaitTermination();
         }
 
+        /// <summary>
+        /// example method to count words
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         private static void wordCount(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -115,67 +176,11 @@ namespace mySparkStreamingApp2
             spark.Stop();
         }
 
-        private void runSpark(string[] args)
+
+        private static bool Predict(string text)
         {
-            // Default to running on localhost:9999
-            string hostname = "localhost";
-            int port = 9092;
-            //The Spark Session is the entry point to programming Spark with the Dataset and DataFrame API.
-            //allows you to access Spark and DataFrame functionality throughout your program.
-            SparkSession spark = SparkSession
-             .Builder()
-             .AppName("Streaming example with a UDF")
-             .GetOrCreate();
-
-            //used to read streaming data in as a DataFrame
-            //host and port information to tell your Spark app where to expect its streaming data.
-            DataFrame lines = spark
-                .ReadStream()
-                .Format("socket")
-                .Option("host", hostname)
-                .Option("port", port)
-                .Load();
-
-
-            //This UDF processes each string it receives from the netcat terminal to produce an array that includes the original string (contained in str), followed by the original string concatenated with the length of the original string.
-            Func<Column, Column> udfArray =
-                                    Udf<string, string[]>((str) => new string[] { str, $"{str} {str.Length}" });
-
-            DataFrame arrayDF = lines.Select(Explode(udfArray(lines["value"])));
-
-            StreamingQuery query = arrayDF
-                                    .WriteStream()
-                                    .Format("console")
-                                    .Start();
-            query.AwaitTermination();
-
-            //Console.WriteLine("Hello World!");
-
-            //// Create Spark session
-            //SparkSession spark =
-            //    SparkSession
-            //        .Builder()
-            //        .AppName("word_count_sample")
-            //        .GetOrCreate();
-
-            //// Create initial DataFrame
-            //string filePath = args[0];
-            //DataFrame dataFrame = spark.Read().Text(filePath);
-
-            ////Count words
-            //DataFrame words =
-            //    dataFrame
-            //        .Select(Split(Col("value"), " ").Alias("words"))
-            //        .Select(Explode(Col("words")).Alias("word"))
-            //        .GroupBy("word")
-            //        .Count()
-            //        .OrderBy(Col("count").Desc());
-
-            //// Display results
-            //words.Show();
-
-            //// Stop Spark session
-            //spark.Stop();
+            var input = new ModelInput { SentimentText = text };
+            return Convert.ToBoolean(Convert.ToInt16(ConsumeModel.Predict(input).Prediction)) ;
         }
     }
 }

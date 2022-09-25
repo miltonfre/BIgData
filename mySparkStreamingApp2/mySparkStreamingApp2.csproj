@@ -9,11 +9,16 @@
     <PackageReference Include="Confluent.Kafka" Version="1.9.3" />
     <PackageReference Include="kafka-sharp" Version="1.4.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.1" />
     <PackageReference Include="Microsoft.Spark" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="6.0.0" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mySparkStreamingApp2ML.Model\mySparkStreamingApp2ML.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

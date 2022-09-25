@@ -8,7 +8,6 @@ namespace KafkaStreaming
         static void Main(string[] args)
         {
             TwitterConnector twits = new TwitterConnector();
-            // CreateHostBuilder(args).Build().Run();
             twits.GetTwitters();
             twits.StartAsync();
             Console.ReadLine();

@@ -9,3 +9,10 @@
 /mySparkStreamingApp2/bin/Debug
 /mySparkStreamingApp2/.vs/mySparkStreamingApp2
 /mySparkStreamingApp2/obj
+/mySparkStreamingApp2ML.ConsoleApp/obj
+/mySparkStreamingApp2ML.ConsoleApp/bin/Debug/netcoreapp3.1
+/mySparkStreamingApp2ML.Model/obj
+/mySparkStreamingApp2ML.Model/bin/Debug/netstandard2.0
+/SentimentRazor/obj
+/SentimentRazor/bin/Debug/netcoreapp3.1
+/mySparkStreamingApp2ML.Model/ConsumeModel.cs
