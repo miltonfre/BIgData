@@ -1,6 +1,8 @@
 # BIgData
-Video: [https://github.com/miltonfre/BIgData](https://web.microsoftstream.com/video/ab71593f-ed0b-4738-ac8c-764d43b4a223)
+Video(https://web.microsoftstream.com/video/ab71593f-ed0b-4738-ac8c-764d43b4a223)
+
 This is the final project for CS523 course BIG DATA TECHNOLOGIES, 
+
 Initial requiriments:
  - Spark Streaming Project
  - Spark and HBase/Hive Integration
